@@ -29,7 +29,8 @@ sources = [
   'gradle.properties',
   'src/**',
   'settings.gradle.kts',
-  'android-sdk-packages.txt'
+  'android-sdk-packages.txt',
+  'CMakeLists.txt'
 ]
 run = "gradle assembleDebug"
 alias = "apk"

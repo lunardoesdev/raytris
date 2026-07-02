@@ -23,7 +23,7 @@
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
-int main(void)
+int realmain(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
@@ -147,3 +147,18 @@ int main(void)
 
     return 0;
 }
+
+
+/*
+#ifdef PLATFORM_ANDROID
+#include "android_native_app_glue.h"
+void android_main(struct android_app* app) {
+  app_dummy();
+  realmain();
+}
+#else
+*/
+int main(void) {
+  return realmain();
+}
+//#endif
