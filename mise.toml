@@ -4,6 +4,7 @@ android-sdk = "latest"
 "github:cesarferreira/byedroid" = "0.9.0"
 gradle = "9.6.1"
 java = "26.0.1"
+zig = "0.15.1"
 
 [env]
 _.path = {tools = true, path = [
@@ -53,3 +54,17 @@ run = '''
   ./build/raytris
 '''
 alias = 'd'
+
+[tasks.build-windows]
+sources = [
+  'src/**',
+  '*.txt'
+]
+run = '''
+  mkdir -p build/windows
+  cd build/windows
+  cmake -DCMAKE_TOOLCHAIN_FILE=cmake/zig-toolchain.cmake \
+   -DZIG_TARGET=x86_64-windows \
+   ../..
+  make
+'''
