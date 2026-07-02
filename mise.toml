@@ -5,6 +5,7 @@ android-sdk = "latest"
 gradle = "9.6.1"
 java = "26.0.1"
 
+
 [env]
 _.path = {tools = true, path = [
  "${ANDROID_HOME}/platform-tools",
