@@ -1,0 +1,7 @@
+build
+.gradle
+.kotlin
+.idsig
+*.apk
+*.aab
+*.idsig
