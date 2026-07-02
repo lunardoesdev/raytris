@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(raytris)
 
+if(ANDROID)
+    set(PLATFORM "Android")
+    set(GRAPHICS "GRAPHICS_API_OPENGL_ES2")
+    add_definitions(-DPLATFORM_ANDROID)
+endif()
+
+
 set(SOURCES
   src/main/c/rayexample.c
 )

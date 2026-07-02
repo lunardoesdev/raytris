@@ -5,3 +5,5 @@ build
 *.apk
 *.aab
 *.idsig
+.mise
+.cxx

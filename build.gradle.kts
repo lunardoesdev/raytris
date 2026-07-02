@@ -22,6 +22,13 @@ android {
         versionCode = 2
         versionName = "1.1"
     }
+    
+    externalNativeBuild {
+        cmake {
+            path = file("CMakeLists.txt")
+            version = "4.1.2"
+        }
+    }
 
     buildTypes {
         release {

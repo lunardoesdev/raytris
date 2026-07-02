@@ -5,12 +5,12 @@ android-sdk = "latest"
 gradle = "9.6.1"
 java = "26.0.1"
 
-
 [env]
 _.path = {tools = true, path = [
  "${ANDROID_HOME}/platform-tools",
  "${ANDROID_HOME}/build-tools/36.0.0",
 ]}
+CPM_SOURCE_CACHE = "${HOME}/.cache/cpm-source-cache"
 
 [settings]
 env_shell_expand = true
@@ -19,6 +19,7 @@ env_shell_expand = true
 sources = ['settings.gradle.kts']
 run = """
   yes | sdkmanager --licenses
+  yes | sdkmanager "cmake;4.1.2"
 """
 
 [tasks.debug-apk]
@@ -32,3 +33,22 @@ sources = [
 ]
 run = "gradle assembleDebug"
 alias = "apk"
+
+[tasks.debug-native]
+sources = [
+  'src/**',
+  '*.txt'
+]
+run = """
+  mkdir -p build
+  cd build
+  cmake ..
+  make
+"""
+
+[tasks.run-native]
+depends = ['debug-native']
+run = '''
+  ./build/raytris
+'''
+alias = 'd'
