@@ -42,18 +42,18 @@ sources = [
   '*.txt'
 ]
 run = """
-  mkdir -p build
-  cd build
-  cmake ..
+  mkdir -p build/debug
+  cd build/debug
+  cmake ../..
   make
 """
 
-[tasks.run-native]
+[tasks.debug]
 depends = ['debug-native']
 run = '''
-  ./build/raytris
+  ./build/debug/raytris
 '''
-alias = 'd'
+alias = 'debug'
 
 [tasks.build-windows]
 sources = [
