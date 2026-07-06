@@ -35,5 +35,9 @@ android {
             isMinifyEnabled = true
         }
     }
+    
+    sourceSets.getByName("main"){
+        assets.srcDirs("assets", "src/main/assets", "src/main/otherAssets", "src/debug/assets")
+    }
 
 }

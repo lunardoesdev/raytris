@@ -126,7 +126,7 @@ int main(void)
             ClearBackground(RAYWHITE);
 
             BeginMode2D(worldSpaceCamera);
-                DrawTexturePro(screen, (Rectangle) {0, 0, screen.width, screen.height},
+                DrawTexturePro(screen, (Rectangle) {0, 0, (float)screen.width, (float)screen.height},
                     rec04, (Vector2){0,0}, rotation, WHITE);
             
                 DrawRectanglePro(rec01, origin, rotation, BLACK);
