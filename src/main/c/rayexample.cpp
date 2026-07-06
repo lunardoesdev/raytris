@@ -19,19 +19,33 @@
 #include "raylib.h"
 
 #include <math.h>       // Required for: sinf(), cosf()
+#include <stdio.h>
+#include <string>
+
+std::string getAssetDir() {
+    std::string appDir = GetApplicationDirectory();
+    
+    std::string appDirAssets = appDir + "/assets/";
+    std::string srcDirAssets = appDir + "../../assets/";
+    
+    if (DirectoryExists(appDirAssets.c_str())) return appDirAssets;
+    if (DirectoryExists(srcDirAssets.c_str())) return srcDirAssets;
+    return "";
+}
 
 //------------------------------------------------------------------------------------
-// Program main entry point
+// Program main entry point 
 //------------------------------------------------------------------------------------
-int realmain(void)
+int main(void)
 {
+    std::string appdir = getAssetDir();
     // Initialization
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    const int virtualScreenWidth = 160;
-    const int virtualScreenHeight = 90;
+    const int virtualScreenWidth = 800;
+    const int virtualScreenHeight = 450;
 
     const float virtualRatio = (float)screenWidth/(float)virtualScreenWidth;
 
@@ -42,6 +56,8 @@ int realmain(void)
 
     Camera2D screenSpaceCamera = { 0 }; // Smoothing camera
     screenSpaceCamera.zoom = 1.0f;
+    
+    Texture2D screen = LoadTexture((appdir + "screen.png").c_str());
 
     // Load render texture to draw all our objects
     RenderTexture2D target = LoadRenderTexture(virtualScreenWidth, virtualScreenHeight);
@@ -49,6 +65,7 @@ int realmain(void)
     Rectangle rec01 = { 70.0f, 35.0f, 20.0f, 20.0f };
     Rectangle rec02 = { 90.0f, 55.0f, 30.0f, 10.0f };
     Rectangle rec03 = { 80.0f, 65.0f, 15.0f, 25.0f };
+    Rectangle rec04 = { 50.0f, 70.0f, 800.0f, 400.0f };
 
     // The target's height is flipped (in the source Rectangle), due to OpenGL reasons
     Rectangle sourceRec = { 0.0f, 0.0f, (float)target.texture.width, -(float)target.texture.height };
@@ -109,9 +126,13 @@ int realmain(void)
             ClearBackground(RAYWHITE);
 
             BeginMode2D(worldSpaceCamera);
+                DrawTexturePro(screen, (Rectangle) {0, 0, screen.width, screen.height},
+                    rec04, (Vector2){0,0}, rotation, WHITE);
+            
                 DrawRectanglePro(rec01, origin, rotation, BLACK);
                 DrawRectanglePro(rec02, origin, -rotation, RED);
                 DrawRectanglePro(rec03, origin, rotation + 45.0f, BLUE);
+                
             EndMode2D();
         EndTextureMode();
 
@@ -133,6 +154,7 @@ int realmain(void)
             DrawText(TextFormat("World resolution: %ix%i", virtualScreenWidth, virtualScreenHeight), 10, 40, 20, DARKGREEN);
             DrawText(TextFormat("Smooth: %s", (smoothOn ? "ON" : "OFF")), 10, screenHeight - 60, 20, RED);
             DrawText(TextFormat("Overscan: %s", (overscan ? "ON" : "OFF")), 10, screenHeight - 30, 20, RED);
+            DrawText(TextFormat("Appdir: %s", appdir.c_str()), 10, 70, 20, DARKBLUE);
             DrawFPS(GetScreenWidth() - 95, 10);
         EndDrawing();
         //----------------------------------------------------------------------------------
@@ -147,18 +169,3 @@ int realmain(void)
 
     return 0;
 }
-
-
-/*
-#ifdef PLATFORM_ANDROID
-#include "android_native_app_glue.h"
-void android_main(struct android_app* app) {
-  app_dummy();
-  realmain();
-}
-#else
-*/
-int main(void) {
-  return realmain();
-}
-//#endif

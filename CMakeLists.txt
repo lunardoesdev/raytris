@@ -20,7 +20,7 @@ CPMAddPackage("gh:raysan5/raylib#6.0")
 
 
 set(SOURCES
-  src/main/c/rayexample.c
+  src/main/c/rayexample.cpp
 )
 
 if(ANDROID)

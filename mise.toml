@@ -38,7 +38,7 @@ alias = "apk"
 
 [tasks.debug-native]
 sources = [
-  'src/**',
+  'src/**/*',
   '*.txt'
 ]
 run = """
