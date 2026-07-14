@@ -24,17 +24,24 @@
 
 std::string getAssetDir() {
     std::string appDir = GetApplicationDirectory();
-    
+
     std::string appDirAssets = appDir + "/assets/";
     std::string srcDirAssets = appDir + "../../assets/";
-    
+
+    std::string rootDirAssets = appDir + "../share/raytris/assets/";
+    std::string rootDirAssets2 = appDir + "../../share/raytris/assets/";
+    std::string rootDirAssets3 = appDir + "../../../share/raytris/assets/";
+
     if (DirectoryExists(appDirAssets.c_str())) return appDirAssets;
     if (DirectoryExists(srcDirAssets.c_str())) return srcDirAssets;
+    if (DirectoryExists(rootDirAssets.c_str())) return rootDirAssets;
+    if (DirectoryExists(rootDirAssets2.c_str())) return rootDirAssets2;
+    if (DirectoryExists(rootDirAssets3.c_str())) return rootDirAssets3;
     return "";
 }
 
 //------------------------------------------------------------------------------------
-// Program main entry point 
+// Program main entry point
 //------------------------------------------------------------------------------------
 int main(void)
 {
@@ -56,7 +63,7 @@ int main(void)
 
     Camera2D screenSpaceCamera = { 0 }; // Smoothing camera
     screenSpaceCamera.zoom = 1.0f;
-    
+
     Texture2D screen = LoadTexture((appdir + "screen.png").c_str());
 
     // Load render texture to draw all our objects
@@ -128,11 +135,11 @@ int main(void)
             BeginMode2D(worldSpaceCamera);
                 DrawTexturePro(screen, (Rectangle) {0, 0, (float)screen.width, (float)screen.height},
                     rec04, (Vector2){0,0}, rotation, WHITE);
-            
+
                 DrawRectanglePro(rec01, origin, rotation, BLACK);
                 DrawRectanglePro(rec02, origin, -rotation, RED);
                 DrawRectanglePro(rec03, origin, rotation + 45.0f, BLUE);
-                
+
             EndMode2D();
         EndTextureMode();
 

@@ -58,3 +58,32 @@ else()
 endif()
 target_link_libraries(${PROJECT_NAME} lua sol2 raylib)
 
+# ---------------------------------------------------------------------------
+# Install & Packaging (CPack)
+# ---------------------------------------------------------------------------
+if(NOT ANDROID)
+    include(GNUInstallDirs)
+
+    # Binary -> <prefix>/bin, assets -> <prefix>/share/raytris/assets
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(DIRECTORY assets/ DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/assets)
+
+    set(CPACK_PACKAGE_NAME    "${PROJECT_NAME}")
+    set(CPACK_PACKAGE_VERSION "1.1")
+    set(CPACK_PACKAGE_VENDOR  "retrolunar")
+    # set(CPACK_PACKAGE_CONTACT "you@example.com")
+    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "raytris - a simple raylib game")
+
+    # Linux packages
+    set(CPACK_GENERATOR "DEB;RPM;TGZ")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "retrolunar")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libgl1, libx11-6, libxi6, libxrandr2, libxinerama1, libxcursor1, libasound2")
+    set(CPACK_RPM_PACKAGE_REQUIRES "libGL, libX11, libXi, libXrandr, libXinerama, libXcursor, alsa-lib")
+
+    # Windows NSIS installer
+    set(CPACK_NSIS_MODIFY_PATH  ON)
+    set(CPACK_NSIS_DISPLAY_NAME "raytris")
+    set(CPACK_PACKAGE_EXECUTABLES "raytris;raytris")
+
+    include(CPack)
+endif()
