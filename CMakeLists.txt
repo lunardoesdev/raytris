@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(raytris LANGUAGES C CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(ANDROID)
     set(PLATFORM "Android")
