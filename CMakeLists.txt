@@ -18,26 +18,20 @@ endif()
 include(cmake/CPM.cmake)
 
 CPMAddPackage("gh:raysan5/raylib#6.0")
-CPMAddPackage(
-  NAME lua
-  GITHUB_REPOSITORY lua/lua
-  VERSION 5.5.0
-  DOWNLOAD_ONLY YES
-)
-
-if(lua_ADDED)
-  # lua has no CMakeLists, so we create our own target
-  file(GLOB lua_sources ${lua_SOURCE_DIR}/*.c)
-  list(REMOVE_ITEM lua_sources "${lua_SOURCE_DIR}/lua.c" "${lua_SOURCE_DIR}/luac.c")
-  add_library(lua STATIC ${lua_sources})
-  target_include_directories(lua SYSTEM PUBLIC $<BUILD_INTERFACE:${lua_SOURCE_DIR}>)
-endif()
 
 CPMAddPackage(
-  NAME sol2
-  GITHUB_REPOSITORY ThePhD/sol2
-  VERSION 3.3.0
+  NAME luau
+  GITHUB_REPOSITORY roblox/luau
+  GIT_TAG 0.729
+  OPTIONS
+    "LUAU_BUILD_CLI OFF"
+    "LUAU_BUILD_TESTS OFF"
+    "LUAU_BUILD_WEB OFF"
+    "LUAU_WERROR OFF"
+    "LUAU_EXTERN_C ON"
+    "LUAU_BUILD_SHARED OFF"
 )
+CPMAddPackage("gh:kunitoki/LuaBridge3#master")
 
 
 set(SOURCES
@@ -57,7 +51,13 @@ target_link_libraries(${PROJECT_NAME}
 else()
     add_executable(${PROJECT_NAME} ${SOURCES})
 endif()
-target_link_libraries(${PROJECT_NAME} lua sol2 raylib)
+target_link_libraries(${PROJECT_NAME}
+    Luau.Compiler
+    Luau.VM
+    Luau.Ast
+    Luau.Analysis
+    LuaBridge
+    raylib)
 
 # ---------------------------------------------------------------------------
 # Install & Packaging (CPack)

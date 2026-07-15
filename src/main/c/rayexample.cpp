@@ -17,10 +17,14 @@
 ********************************************************************************************/
 
 #include "raylib.h"
-
 #include <math.h>       // Required for: sinf(), cosf()
-#include <stdio.h>
+#include <algorithm>
 #include <string>
+
+#include "lua.h"
+#include "lualib.h"
+#include "Luau/Compiler.h"
+#include <LuaBridge/LuaBridge.h>
 
 std::string getAssetDir() {
     std::string appDir = GetApplicationDirectory();
@@ -40,11 +44,47 @@ std::string getAssetDir() {
     return "";
 }
 
+
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
 int main(void)
 {
+    lua_State* L = luaL_newstate();
+    luaL_openlibs(L);
+    // Compile then load
+    const char* source = R"(
+        local x = 10
+        local y = 20
+        print("Hello from Luau! " .. tostring(x + y))
+
+        function greet(name)
+            return "Hi, " .. name .. "!"
+        end
+    )";
+    std::string bytecode = Luau::compile(source);
+    if (bytecode.empty()) {
+        fprintf(stderr, "Compilation failed\n");
+        lua_close(L);
+        return 1;
+    }
+
+    if (luau_load(L, "=main", bytecode.data(), bytecode.size(), 0) != 0) {
+        std::cerr << "Load error: " << lua_tostring(L, -1) << std::endl;
+        lua_close(L);
+        return 1;
+    }
+
+    if (lua_pcall(L, 0, 0, 0) != 0) {
+        // Handle runtime error on top of the stack
+        std::cerr << "Runtime error: " << lua_tostring(L, -1) << std::endl;
+        lua_close(L);
+        return 1;
+    }
+
+    lua_close(L);
+
+
     std::string appdir = getAssetDir();
     // Initialization
     //--------------------------------------------------------------------------------------
